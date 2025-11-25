@@ -10,6 +10,7 @@
 using namespace std;
 
 // Directions for DFS (students must use these)
+//
 int dr[4] = {-1, 0, 1, 0};
 int dc[4] = {0, 1, 0, -1};
 
@@ -17,11 +18,14 @@ int dc[4] = {0, 1, 0, -1};
 // DO NOT MODIFY: Maze generation
 // ----------------------------------------------------------
 void generateMaze(vector<vector<int>>& maze, int N, int M) {
+    // Random generator using a seed
     srand(time(0));
 
+    // Randomly assigns each maze cell
     for (int r = 0; r < N; r++) {
         for (int c = 0; c < M; c++) {
             int roll = rand() % 100;
+            // 70% of the time will be 0, the other 30% will be 1
             maze[r][c] = (roll < 70) ? 0 : 1;   // 0 = open, 1 = wall
         }
     }
@@ -34,7 +38,10 @@ pair<int,int> chooseBoundaryCell(const vector<vector<int>>& maze) {
     int N = maze.size();
     int M = maze[0].size();
 
+    // Will run until a cell is found
     while (true) {
+
+        // Choose a randomly selected side of the maze
         int side = rand() % 4;
         int r, c;
 
@@ -52,6 +59,7 @@ pair<int,int> chooseBoundaryCell(const vector<vector<int>>& maze) {
             c = M - 1;
         }
 
+        // Check if the cell is open
         if (maze[r][c] == 0) {
             return {r, c};
         }
@@ -71,10 +79,15 @@ void printMaze(const vector<vector<int>>& maze,
     cout << "\nMaze:\n";
     for (int r = 0; r < N; r++) {
         for (int c = 0; c < M; c++) {
+            // Print S for the start of the maze if ent_r and ent_c are true
             if (r == ent_r && c == ent_c) {
                 cout << "S ";
+
+            // If exit_r and exit_c are true then print E for end of maze
             } else if (r == exit_r && c == exit_c) {
                 cout << "E ";
+
+            // If neither of those, print 0 or 1 based on the cell number
             } else {
                 cout << maze[r][c] << " ";
             }
@@ -92,9 +105,11 @@ void printPath(pair<int,int> exitcell,
                const vector<vector<int>>& parent_c,
                int ent_r, int ent_c)
 {
+    // Find the exit
     int r = exitcell.first;
     int c = exitcell.second;
 
+    // Make a new vector with the path list
     vector<pair<int,int>> path;
 
     // Walk backward from exit to entrance
@@ -123,44 +138,61 @@ void printPath(pair<int,int> exitcell,
           vector<vector<int>>& parent_r,
           vector<vector<int>>& parent_c,
           int exit_r, int exit_c) {
+
      int N = maze.size();
      int M = maze[0].size();
+
+     // Checks for out of bounds cells
      if (r < 0 || r >= N) {
          return false;
      }
      if (c < 0 || c >= M) {
          return false;
      }
+
+     // Checks for walls
      if (maze[r][c] == 1) {
          return false;
      }
+
+     // Checks if cell has already been visited
      if (visited[r][c]) {
          return false;
      }
 
+     // Immediately sets visited to true
      visited[r][c] = true;
 
+     // Base case where we have found a way to get out of the maze
      if (r == exit_r && c == exit_c) {
          return true;
      }
 
+     // Explore neighbors with up/right/down/left
      for (int d = 0; d < 4; d++) {
          int nr = r + dr[d];
          int nc = c + dc[d];
 
+         // Check if the neighbor cell is out of bounds
          if (nr < 0 || nr >= N || nc < 0 || nc >= M) {
            continue;
          }
+
+         //Check if neighbor cell is a wall
          if (maze[nr][nc] == 1) {
              continue;
          }
+
+         // Check if we have already visited neighbor cell
          if (visited[nr][nc]) {
              continue;
          }
 
+         // Assign parent to the original cell
          parent_r[nr][nc] = r;
          parent_c[nr][nc] = c;
 
+         // Recursive call moving to the new column and new row cell
          if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
              return true;
          }
@@ -175,9 +207,11 @@ void printPath(pair<int,int> exitcell,
 int main() {
     int N, M;
 
+    // Getting the size of the maze
     cout << "Enter maze dimensions N M: ";
     cin >> N >> M;
 
+    // Creating the maze using generateMaze()
     vector<vector<int>> maze(N, vector<int>(M));
     generateMaze(maze, N, M);
 
