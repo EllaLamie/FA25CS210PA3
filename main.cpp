@@ -10,7 +10,6 @@
 using namespace std;
 
 // Directions for DFS (students must use these)
-//
 int dr[4] = {-1, 0, 1, 0};
 int dc[4] = {0, 1, 0, -1};
 
@@ -120,8 +119,10 @@ void printPath(pair<int,int> exitcell,
         r = pr;
         c = pc;
     }
+    // Append ent_r and ent_c into the vector
     path.push_back({ent_r, ent_c});
 
+    // Print path by iteration
     cout << "\nPath from entrance to exit:\n";
     for (int i = path.size() - 1; i >= 0; i--) {
         cout << "(" << path[i].first << ", " << path[i].second << ")\n";
@@ -194,6 +195,8 @@ void printPath(pair<int,int> exitcell,
 
          // Recursive call moving to the new column and new row cell
          if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
+
+             // Need a for loop to return true because it will then return true in all children
              return true;
          }
      }
@@ -223,6 +226,7 @@ int main() {
         exitcell = chooseBoundaryCell(maze);
     }
 
+    // Assign entrance and exit (first and second) to row and column entrance and exit
     int ent_r = entrance.first;
     int ent_c = entrance.second;
     int exit_r = exitcell.first;
