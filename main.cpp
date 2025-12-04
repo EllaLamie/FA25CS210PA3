@@ -196,7 +196,7 @@ void printPath(pair<int,int> exitcell,
          // Recursive call moving to the new column and new row cell
          if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
 
-             // Need a for loop to return true because it will then return true in all children
+             // Need an if statement to return true because it will then return true in all children
              return true;
          }
      }
